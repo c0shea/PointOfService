@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using Microsoft.PointOfService;
 
 namespace PointOfService.Hardware.Sample
 {
@@ -48,10 +49,13 @@ namespace PointOfService.Hardware.Sample
         private static void RunPrinter()
         {
             var printer = new Printer("PosPrinter");
-
             Console.WriteLine("Printing...");
 
-            //printer.Device.TransactionPrint();
+            printer.Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Transaction);
+
+            printer.Device.PrintNormal(PrinterStation.Receipt, "Test Receipt");
+
+            printer.Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Normal);
 
             printer.Dispose();
 
