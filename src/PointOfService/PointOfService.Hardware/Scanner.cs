@@ -16,12 +16,12 @@ namespace PointOfService.Hardware
             Device = explorer.CreateInstance(device) as Microsoft.PointOfService.Scanner;
         }
 
-        public void Start(Action<string, BarcodeSymbology> action)
+        public void Start(Action<string, BarCodeSymbology> action)
         {
             Device.DataEvent += (sender, args) =>
             {
                 var decodedBarcode = Encoding.UTF8.GetString(Device.ScanDataLabel);
-                var symbology = (BarcodeSymbology)Device.ScanDataType;
+                var symbology = Device.ScanDataType;
 
                 action(decodedBarcode, symbology);
 

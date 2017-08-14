@@ -19,6 +19,7 @@ namespace PointOfService.Hardware.Sample
                     RunScanner();
                     break;
                 case 2:
+                    RunPrinter();
                     break;
                 default:
                     Console.WriteLine("No valid option was selected");
@@ -42,6 +43,18 @@ namespace PointOfService.Hardware.Sample
             Console.WriteLine("Ready");
             Console.ReadLine();
             scanner.Dispose();
+        }
+
+        private static void RunPrinter()
+        {
+            var printer = new Printer("PosPrinter");
+
+            Console.WriteLine("Printing...");
+
+            //printer.Device.TransactionPrint();
+
+            printer.Dispose();
+
         }
     }
 }
