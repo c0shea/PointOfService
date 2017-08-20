@@ -49,16 +49,15 @@ namespace PointOfService.Hardware.Sample
         private static void RunPrinter()
         {
             var printer = new Printer("PosPrinter");
+            printer.Open();
+
             Console.WriteLine("Printing...");
 
             printer.Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Transaction);
-
             printer.Device.PrintNormal(PrinterStation.Receipt, "Test Receipt");
-
             printer.Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Normal);
 
             printer.Dispose();
-
         }
     }
 }
