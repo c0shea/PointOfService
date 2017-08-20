@@ -6,7 +6,10 @@ namespace PointOfService.Hardware
 {
     public class Printer : IDisposable
     {
+        public const char Escape = (char)27;
+
         public PosPrinter Device { get; }
+        public string Esc => Escape + "|";
         public byte[] CashDrawerOpenCodes { get; set; }
 
         public Printer(string logicalName)
@@ -36,6 +39,46 @@ namespace PointOfService.Hardware
             Device.DeviceEnabled = false;
             Device.Release();
             Device.Close();
+        }
+
+        public void Execute(Bitmap bitmap)
+        {
+            var alignment = 0;
+
+            switch (bitmap.Alignment)
+            {
+                case Alignment.Center:
+                    alignment = PosPrinter.PrinterBitmapCenter;
+                    break;
+                case Alignment.Left:
+                    alignment = PosPrinter.PrinterBitmapLeft;
+                    break;
+                case Alignment.Right:
+                    alignment = PosPrinter.PrinterBitmapRight;
+                    break;
+            }
+            
+            Device.PrintBitmap(PrinterStation.Receipt, bitmap.FileName, PosPrinter.PrinterBitmapAsIs, alignment);
+        }
+
+        public void Execute(Barcode barcode)
+        {
+            var alignment = 0;
+
+            switch (barcode.Alignment)
+            {
+                case Alignment.Center:
+                    alignment = PosPrinter.PrinterBarCodeCenter;
+                    break;
+                case Alignment.Left:
+                    alignment = PosPrinter.PrinterBarCodeLeft;
+                    break;
+                case Alignment.Right:
+                    alignment = PosPrinter.PrinterBarCodeRight;
+                    break;
+            }
+
+            Device.PrintBarCode(PrinterStation.Receipt, barcode.Data, barcode.Symbology, barcode.Height, barcode.Width, alignment, barcode.TextPosition);
         }
     }
 }
