@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.PointOfService;
 
 namespace PointOfService.Hardware
@@ -6,6 +7,7 @@ namespace PointOfService.Hardware
     public class Printer : IDisposable
     {
         public PosPrinter Device { get; }
+        public byte[] CashDrawerOpenCodes { get; set; }
 
         public Printer(string logicalName)
         {
@@ -22,6 +24,11 @@ namespace PointOfService.Hardware
             Device.DeviceEnabled = true;
             Device.RecLetterQuality = true;
             Device.MapMode = MapMode.Metric;
+        }
+
+        public void OpenCashDrawer()
+        {
+            Device.PrintNormal(PrinterStation.Receipt, new string(CashDrawerOpenCodes.Select(c => (char)c).ToArray()));
         }
 
         public void Dispose()

@@ -51,8 +51,11 @@ namespace PointOfService.Hardware.Sample
             var printer = new Printer("PosPrinter");
             printer.Open();
 
-            Console.WriteLine("Printing...");
+            Console.WriteLine("Opening Drawer...");
+            printer.CashDrawerOpenCodes = new byte[] {27, 112, 0, 100, 250};
+            printer.OpenCashDrawer();
 
+            Console.WriteLine("Printing...");
             printer.Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Transaction);
             printer.Device.PrintNormal(PrinterStation.Receipt, "Test Receipt");
             printer.Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Normal);
