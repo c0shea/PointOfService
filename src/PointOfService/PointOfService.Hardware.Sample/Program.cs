@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using Microsoft.PointOfService;
 
@@ -68,14 +69,40 @@ namespace PointOfService.Hardware.Sample
 
             //printer.Execute(b);
 
-            printer.Execute(new Barcode
+            //printer.Execute(new Barcode
+            //{
+            //    Alignment = Alignment.Center,
+            //    Symbology = BarCodeSymbology.Upca,
+            //    Data = "609032551339",
+            //    Height = 750,
+            //    Width = 1500,
+            //    TextPosition = BarCodeTextPosition.Below
+            //});
+
+            printer.Execute(new List<Line>
             {
-                Alignment = Alignment.Center,
-                Symbology = BarCodeSymbology.Upca,
-                Data = "609032551339",
-                Height = 750,
-                Width = 1500,
-                TextPosition = BarCodeTextPosition.Below
+                new Line
+                {
+                    IsBold = true,
+                    Text = "This is bold text"
+                },
+                new Line
+                {
+                    IsItalic = true,
+                    Text = "This is italic text"
+                },
+                new Line
+                {
+                    IsUnderline = true,
+                    Text = "This is underline text"
+                },
+                new Line
+                {
+                    IsBold = true,
+                    IsItalic = true,
+                    IsUnderline = true,
+                    Text = "This is all three"
+                }
             });
             
             printer.Dispose();

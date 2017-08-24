@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.PointOfService;
 
@@ -79,6 +80,18 @@ namespace PointOfService.Hardware
             }
 
             Device.PrintBarCode(PrinterStation.Receipt, barcode.Data, barcode.Symbology, barcode.Height, barcode.Width, alignment, barcode.TextPosition);
+        }
+
+        public void Execute(List<Line> lines)
+        {
+            Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Transaction);
+
+            foreach (var line in lines)
+            {
+                Device.PrintNormal(PrinterStation.Receipt, line.ToString());
+            }
+
+            Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Normal);
         }
     }
 }
