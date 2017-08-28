@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using Microsoft.PointOfService;
 
@@ -47,6 +48,31 @@ namespace PointOfService.Hardware.Sample
             scanner.Dispose();
         }
 
+        public static string Format(object obj)
+        {
+            var sb = new StringBuilder();
+
+            if (obj != null)
+            {
+                sb.AppendLine(obj.ToString());
+            }
+
+            var array = obj as Array;
+
+            if (array != null)
+            {
+                for (var i = 0; i < array.Length; i++)
+                {
+                    sb.Append("  [");
+                    sb.Append(i);
+                    sb.Append("]: ");
+                    sb.AppendLine(array.GetValue(i).ToString());
+                }
+            }
+
+            return sb.ToString();
+        }
+
         private static void RunPrinter()
         {
             var printer = new Printer("PosPrinter");
@@ -79,33 +105,62 @@ namespace PointOfService.Hardware.Sample
             //    TextPosition = BarCodeTextPosition.Below
             //});
 
-            printer.Execute(new List<Line>
+            var lines = new List<Line>();
+
+            var t = printer.Device.GetType();
+            var p = t.GetProperties();
+
+            foreach (var propertyInfo in p)
             {
-                new Line
+                lines.Add(new Line
                 {
-                    IsBold = true,
-                    Text = "This is bold text"
-                },
-                new Line
-                {
-                    IsItalic = true,
-                    Text = "This is italic text"
-                },
-                new Line
-                {
-                    IsUnderline = true,
-                    Text = "This is underline text"
-                },
-                new Line
-                {
-                    IsBold = true,
-                    IsItalic = true,
-                    IsUnderline = true,
-                    Text = "This is all three"
-                }
-            });
+                    Alignment = Alignment.Left,
+                    Text = $"{EscapeSequence.Bold()}{propertyInfo.Name}: {EscapeSequence.Normal}{Format(propertyInfo.GetValue(printer.Device))}",
+                    CharactersPerLine = 56
+                });
+            }
+
+
+            printer.ExecuteAll(lines);
+
+            // CPL Lg = 28, M = 42, Sm = 56
+            //printer.ExecuteAll(new List<Line>
+            //{
+            //    new Line
+            //    {
+            //        IsBold = true,
+            //        Text = "This is bold text"
+            //    },
+            //    new Line
+            //    {
+            //        IsItalic = true,
+            //        Text = "This is italic text",
+            //        Alignment = Alignment.Center,
+            //        CharactersPerLine = 56
+            //    },
+            //    new Line
+            //    {
+            //        IsUnderline = true,
+            //        Text = "This is underline text",
+            //        Alignment = Alignment.Right
+            //    },
+            //    new Line
+            //    {
+            //        IsBold = true,
+            //        IsItalic = true,
+            //        IsUnderline = true,
+            //        Text = "This is all three",
+            //        CharactersPerLine = 28
+            //    }
+            //});
+
+            //printer.Execute(new FeedLines{Lines = 4});
+
+            printer.Execute(new FeedAndPaperCut());
             
             printer.Dispose();
+
+            Console.ReadLine();
         }
     }
 }

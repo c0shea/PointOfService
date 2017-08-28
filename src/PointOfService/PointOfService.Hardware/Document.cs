@@ -9,8 +9,8 @@ namespace PointOfService.Hardware
 {
     public enum Alignment
     {
-        Center,
         Left,
+        Center,
         Right
     }
 
@@ -30,13 +30,13 @@ namespace PointOfService.Hardware
         public BarCodeTextPosition TextPosition { get; set; }
     }
 
-    public class Line
+    public class Line : ICommand
     {
         public Alignment Alignment { get; set; }
         public bool IsBold { get; set; }
         public bool IsUnderline { get; set; }
         public bool IsItalic { get; set; }
-        public short CharactersPerLine { get; set; }
+        public short? CharactersPerLine { get; set; }
         public string Text { get; set; }
 
         public override string ToString()
@@ -75,38 +75,122 @@ namespace PointOfService.Hardware
 
             return sb.ToString();
         }
+
+        public void Execute(PosPrinter printer)
+        {
+            if (CharactersPerLine.HasValue)
+            {
+                printer.RecLineChars = CharactersPerLine.Value;
+            }
+
+            printer.Print(ToString());
+        }
     }
-    
-    public static class EscapeSequence
+
+    public interface ICommand
     {
-        private const char EscapeCharacter = (char)27;
+        void Execute(PosPrinter printer);
+    }
 
-        public static string Esc => $"{EscapeCharacter}|";
-        public static string Normal => $"{Esc}N";
+    public static class CommandExtensions
+    {
+        public static void Print(this PosPrinter printer, string command)
+        {
+            printer.PrintNormal(PrinterStation.Receipt, command);
+        }
+    }
 
-        public static string Bold(bool isEnabled = true) => $"{Esc}{(isEnabled ? "" : "!")}bC";
-        public static string Underline(bool isEnabled = true, double? thickness = null) => $"{Esc}{(isEnabled ? "" : "!")}{thickness?.ToString() ?? ""}uC";
-        public static string Italic(bool isEnabled = true) => $"{Esc}{(isEnabled ? "" : "!")}iC";
+    public class PaperCut : ICommand
+    {
+        public byte? PercentCut { get; set; }
 
-        public static string AlternateColor(double? color = null) => $"{Esc}{color?.ToString() ?? ""}rC";
-        public static string ReverseVideo(bool isEnabled = true) => $"{Esc}{(isEnabled ? "" : "!")}rvC";
-        public static string Shading(double? percentShade = null) => $"{Esc}{percentShade?.ToString() ?? ""}sC";
+        public void Execute(PosPrinter printer)
+        {
+            printer.Print(EscapeSequence.PaperCut(PercentCut));
+        }
+    }
 
-        public static string SingleHighAndWide => $"{Esc}1C";
-        public static string DoubleWide => $"{Esc}2C";
-        public static string DoubleHigh => $"{Esc}3C";
-        public static string DoubleHighAndWide => $"{Esc}4C";
+    public class FeedAndPaperCut : ICommand
+    {
+        public byte? PercentCut { get; set; }
 
-        public static string ScaleHorizontally(byte multiple) => $"{Esc}{multiple}hC";
-        public static string ScaleVertically(byte multiple) => $"{Esc}{multiple}vC";
+        public void Execute(PosPrinter printer)
+        {
+            printer.Print(EscapeSequence.FeedAndPaperCut(PercentCut));
+        }
+    }
 
-        public static string RgbColor(byte red, byte green, byte blue) => $"{Esc}{red:000}{green:000}{blue:000}fC";
-        public static string Subscript(bool isEnabled = true) => $"{Esc}{(isEnabled ? "" : "!")}tbC";
-        public static string Superscript(bool isEnabled = true) => $"{Esc}{(isEnabled ? "" : "!")}tpC";
-        public static string Strikethrough(bool isEnabled = true, double? thickness = null) => $"{Esc}{(isEnabled ? "" : "!")}{thickness?.ToString() ?? ""}stC";
+    public class FeedCutAndStamp : ICommand
+    {
+        public byte? PercentCut { get; set; }
 
-        public static string Center => $"{Esc}cA";
-        public static string Right => $"{Esc}rA";
-        public static string Left => $"{Esc}lA";
+        public void Execute(PosPrinter printer)
+        {
+            printer.Print(EscapeSequence.FeedCutAndStamp(PercentCut));
+        }
+    }
+
+    public class FireStamp : ICommand
+    {
+        public void Execute(PosPrinter printer)
+        {
+            printer.Print(EscapeSequence.FireStamp);
+        }
+    }
+
+    public class PrintBitmap : ICommand
+    {
+        public short BitmapNumber { get; set; }
+
+        public void Execute(PosPrinter printer)
+        {
+            printer.Print(EscapeSequence.PrintBitmap(BitmapNumber));
+        }
+    }
+
+    public class PrintTopLogo : ICommand
+    {
+        public void Execute(PosPrinter printer)
+        {
+            printer.Print(EscapeSequence.PrintTopLogo);
+        }
+    }
+
+    public class PrintBottomLogo : ICommand
+    {
+        public void Execute(PosPrinter printer)
+        {
+            printer.Print(EscapeSequence.PrintBottomLogo);
+        }
+    }
+
+    public class FeedLines : ICommand
+    {
+        public short? Lines { get; set; }
+
+        public void Execute(PosPrinter printer)
+        {
+            printer.Print(EscapeSequence.FeedLines(Lines));
+        }
+    }
+
+    public class FeedUnits : ICommand
+    {
+        public int? Units { get; set; }
+
+        public void Execute(PosPrinter printer)
+        {
+            printer.Print(EscapeSequence.FeedUnits(Units));
+        }
+    }
+
+    public class FeedReverse : ICommand
+    {
+        public short? Lines { get; set; }
+
+        public void Execute(PosPrinter printer)
+        {
+            printer.Print(EscapeSequence.FeedReverse(Lines));
+        }
     }
 }

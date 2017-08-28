@@ -93,5 +93,22 @@ namespace PointOfService.Hardware
 
             Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Normal);
         }
+
+        public void ExecuteAll(IEnumerable<ICommand> commands)
+        {
+            Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Transaction);
+
+            foreach (var command in commands)
+            {
+                command.Execute(Device);
+            }
+
+            Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Normal);
+        }
+
+        public void Execute(ICommand command)
+        {
+            command.Execute(Device);
+        }
     }
 }
