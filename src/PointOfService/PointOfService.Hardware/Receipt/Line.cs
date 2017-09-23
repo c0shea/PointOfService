@@ -5,7 +5,7 @@ using Microsoft.PointOfService;
 namespace PointOfService.Hardware.Receipt
 {
     [XmlRoot]
-    public class Line : Command
+    public class Line : ICommand
     {
         [XmlAttribute]
         public Alignment Alignment { get; set; }
@@ -19,7 +19,7 @@ namespace PointOfService.Hardware.Receipt
         [XmlAttribute]
         public bool IsItalic { get; set; }
 
-        [XmlElement]
+        [XmlAttribute]
         public short? CharactersPerLine { get; set; }
 
         [XmlAttribute]
@@ -62,7 +62,7 @@ namespace PointOfService.Hardware.Receipt
             return sb.ToString();
         }
 
-        public override void Execute(PosPrinter printer)
+        public void Execute(PosPrinter printer)
         {
             if (CharactersPerLine.HasValue)
             {

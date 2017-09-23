@@ -4,9 +4,9 @@ using Microsoft.PointOfService;
 namespace PointOfService.Hardware.Receipt
 {
     [XmlRoot]
-    public class PrintBottomLogo : Command
+    public class PrintBottomLogo : ICommand
     {
-        public override void Execute(PosPrinter printer)
+        public void Execute(PosPrinter printer)
         {
             printer.Print(EscapeSequence.PrintBottomLogo);
         }

@@ -73,7 +73,7 @@
     <Compile Include="Receipt\FeedReverse.cs" />
     <Compile Include="Receipt\FeedUnits.cs" />
     <Compile Include="Receipt\FireStamp.cs" />
-    <Compile Include="Receipt\Command.cs" />
+    <Compile Include="Receipt\ICommand.cs" />
     <Compile Include="Receipt\Line.cs" />
     <Compile Include="Receipt\PaperCut.cs" />
     <Compile Include="Receipt\PrintBitmap.cs" />

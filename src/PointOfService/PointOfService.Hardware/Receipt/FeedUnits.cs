@@ -4,12 +4,12 @@ using Microsoft.PointOfService;
 namespace PointOfService.Hardware.Receipt
 {
     [XmlRoot]
-    public class FeedUnits : Command
+    public class FeedUnits : ICommand
     {
         [XmlAttribute]
         public int? Units { get; set; }
 
-        public override void Execute(PosPrinter printer)
+        public void Execute(PosPrinter printer)
         {
             printer.Print(EscapeSequence.FeedUnits(Units));
         }

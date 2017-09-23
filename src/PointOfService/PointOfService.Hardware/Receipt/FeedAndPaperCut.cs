@@ -4,12 +4,12 @@ using Microsoft.PointOfService;
 namespace PointOfService.Hardware.Receipt
 {
     [XmlRoot]
-    public class FeedAndPaperCut : Command
+    public class FeedAndPaperCut : ICommand
     {
-        [XmlElement(IsNullable = true)]
+        [XmlAttribute]
         public byte? PercentCut { get; set; }
 
-        public override void Execute(PosPrinter printer)
+        public void Execute(PosPrinter printer)
         {
             printer.Print(EscapeSequence.FeedAndPaperCut(PercentCut));
         }

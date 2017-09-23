@@ -7,8 +7,7 @@ namespace PointOfService.Hardware.Receipt
     [XmlRoot]
     public class Document
     {
-        [XmlArray]
-        public List<Command> Commands { get; set; }
+        public List<ICommand> Commands { get; set; }
 
         public void Print(Printer printer)
         {
