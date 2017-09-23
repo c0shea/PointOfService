@@ -54,14 +54,15 @@ namespace PointOfService.Hardware.Receipt
             }
         }
 
-        public void PrintSlip(Document document, TimeSpan insertionTimeout)
+        public void PrintSlip(Document document, TimeSpan timeout)
         {
             if (!Device.CapSlpPresent)
             {
                 throw new InvalidOperationException("The device doesn't have the slip print station capability.");
             }
 
-            Device.BeginInsertion((int)insertionTimeout.TotalMilliseconds);
+            Device.BeginInsertion((int)timeout.TotalMilliseconds);
+            Device.EndInsertion();
 
             //if (Device.CapTransaction)
             //{
@@ -78,7 +79,8 @@ namespace PointOfService.Hardware.Receipt
             //    Device.TransactionPrint(PrinterStation.Slip, PrinterTransactionControl.Normal);
             //}
 
-            Device.EndInsertion();
+            Device.BeginRemoval((int)timeout.TotalMilliseconds);
+            Device.EndRemoval();
         }
 
         public void Dispose()

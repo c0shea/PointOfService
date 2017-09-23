@@ -15,10 +15,8 @@ namespace PointOfService.Hardware.Sample
             var printer = new Printer("PosPrinter");
             printer.Open();
 
-            var receipt = BuildReceipt();
-
-            printer.PrintReceipt(receipt);
-            //printer.PrintSlip(receipt, new TimeSpan(0, 0, 10));
+            printer.PrintReceipt(BuildReceipt());
+            printer.PrintSlip(BuildSlip(), new TimeSpan(0, 0, 30));
 
             //Console.WriteLine("Opening Drawer...");
             //printer.CashDrawerOpenCodes = new byte[] {27, 112, 0, 100, 250};
@@ -190,6 +188,26 @@ namespace PointOfService.Hardware.Sample
                         TextPosition = BarCodeTextPosition.Below
                     },
                     new FeedAndPaperCut()
+                }
+            };
+
+            return document;
+        }
+
+        private static Document BuildSlip()
+        {
+            var document = new Document
+            {
+                Commands = new List<ICommand>
+                {
+                    new Line
+                    {
+                        Text = "TEST FROM SLIP PRINTER"
+                    },
+                    new Line
+                    {
+                        Text = DateTime.Now.ToString("MMMM d, yyyy")
+                    }
                 }
             };
 
