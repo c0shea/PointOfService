@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.PointOfService;
 using PointOfService.Hardware.Receipt;
 
@@ -19,7 +17,8 @@ namespace PointOfService.Hardware.Sample
 
             var receipt = BuildReceipt();
 
-            receipt.Print(printer);
+            printer.PrintReceipt(receipt);
+            //printer.PrintSlip(receipt, new TimeSpan(0, 0, 10));
 
             //Console.WriteLine("Opening Drawer...");
             //printer.CashDrawerOpenCodes = new byte[] {27, 112, 0, 100, 250};
@@ -48,7 +47,7 @@ namespace PointOfService.Hardware.Sample
             //    TextPosition = BarCodeTextPosition.Below
             //});
 
-            
+
 
             // CPL Lg = 28, M = 42, Sm = 56
             //printer.ExecuteAll(new List<Line>
@@ -84,32 +83,30 @@ namespace PointOfService.Hardware.Sample
             //printer.Execute(new FeedLines{Lines = 4});
 
             printer.Dispose();
-
-            Console.ReadLine();
         }
 
-        private static void PrintProperties(Printer printer)
-        {
-            var lines = new List<Line>();
+        //private static void PrintProperties(Printer printer)
+        //{
+        //    var lines = new List<Line>();
 
-            var t = printer.Device.GetType();
-            var p = t.GetProperties();
+        //    var t = printer.Device.GetType();
+        //    var p = t.GetProperties();
 
-            foreach (var propertyInfo in p)
-            {
-                lines.Add(new Line
-                {
-                    Alignment = Alignment.Left,
-                    Text = $"{EscapeSequence.Bold()}{propertyInfo.Name}: {EscapeSequence.Normal}{Format(propertyInfo.GetValue(printer.Device))}",
-                    CharactersPerLine = 56
-                });
-            }
+        //    foreach (var propertyInfo in p)
+        //    {
+        //        lines.Add(new Line
+        //        {
+        //            Alignment = Alignment.Left,
+        //            Text = $"{EscapeSequence.Bold()}{propertyInfo.Name}: {EscapeSequence.Normal}{Format(propertyInfo.GetValue(printer.Device))}",
+        //            CharactersPerLine = 56
+        //        });
+        //    }
 
 
-            printer.ExecuteAll(lines);
+        //    printer.ExecuteAll(lines);
 
-            printer.Execute(new FeedAndPaperCut());
-        }
+        //    printer.Execute(new FeedAndPaperCut());
+        //}
 
         private static string Format(object obj)
         {

@@ -1,30 +1,17 @@
-﻿using System.Xml.Serialization;
-using Microsoft.PointOfService;
+﻿using Microsoft.PointOfService;
 
 namespace PointOfService.Hardware.Receipt
 {
-    [XmlRoot]
     public class Barcode : ICommand
     {
-        [XmlAttribute]
         public Alignment Alignment { get; set; }
-
-        [XmlAttribute]
         public BarCodeSymbology Symbology { get; set; }
-
-        [XmlAttribute]
         public string Data { get; set; }
-
-        [XmlAttribute]
         public int Height { get; set; }
-
-        [XmlAttribute]
         public int Width { get; set; }
-
-        [XmlAttribute]
         public BarCodeTextPosition TextPosition { get; set; }
 
-        public void Execute(PosPrinter printer)
+        public void Execute(PosPrinter printer, PrinterStation station)
         {
             var alignment = 0;
 
@@ -41,7 +28,7 @@ namespace PointOfService.Hardware.Receipt
                     break;
             }
 
-            printer.PrintBarCode(PrinterStation.Receipt, Data, Symbology, Height, Width, alignment, TextPosition);
+            printer.PrintBarCode(station, Data, Symbology, Height, Width, alignment, TextPosition);
         }
     }
 }

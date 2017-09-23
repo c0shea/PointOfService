@@ -1,14 +1,12 @@
-﻿using System.Xml.Serialization;
-using Microsoft.PointOfService;
+﻿using Microsoft.PointOfService;
 
 namespace PointOfService.Hardware.Receipt
 {
-    [XmlRoot]
     public class PrintBottomLogo : ICommand
     {
-        public void Execute(PosPrinter printer)
+        public void Execute(PosPrinter printer, PrinterStation station)
         {
-            printer.Print(EscapeSequence.PrintBottomLogo);
+            printer.PrintNormal(station, EscapeSequence.PrintBottomLogo);
         }
     }
 }

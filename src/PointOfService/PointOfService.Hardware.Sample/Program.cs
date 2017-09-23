@@ -5,7 +5,7 @@ namespace PointOfService.Hardware.Sample
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
             var option = 0;
 

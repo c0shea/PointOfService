@@ -1,18 +1,13 @@
-﻿using System.Xml.Serialization;
-using Microsoft.PointOfService;
+﻿using Microsoft.PointOfService;
 
 namespace PointOfService.Hardware.Receipt
 {
-    [XmlRoot]
     public class Bitmap : ICommand
     {
-        [XmlAttribute]
         public Alignment Alignment { get; set; }
-
-        [XmlAttribute]
         public string FileName { get; set; }
 
-        public void Execute(PosPrinter printer)
+        public void Execute(PosPrinter printer, PrinterStation station)
         {
             var alignment = 0;
 

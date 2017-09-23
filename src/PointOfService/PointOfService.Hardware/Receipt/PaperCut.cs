@@ -1,17 +1,14 @@
-﻿using System.Xml.Serialization;
-using Microsoft.PointOfService;
+﻿using Microsoft.PointOfService;
 
 namespace PointOfService.Hardware.Receipt
 {
-    [XmlRoot]
     public class PaperCut : ICommand
     {
-        [XmlAttribute]
         public byte? PercentCut { get; set; }
 
-        public void Execute(PosPrinter printer)
+        public void Execute(PosPrinter printer, PrinterStation station)
         {
-            printer.Print(EscapeSequence.PaperCut(PercentCut));
+            printer.PrintNormal(station, EscapeSequence.PaperCut(PercentCut));
         }
     }
 }
