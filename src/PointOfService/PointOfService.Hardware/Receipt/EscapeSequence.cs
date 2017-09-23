@@ -1,4 +1,4 @@
-﻿namespace PointOfService.Hardware
+﻿namespace PointOfService.Hardware.Receipt
 {
     public static class EscapeSequence
     {

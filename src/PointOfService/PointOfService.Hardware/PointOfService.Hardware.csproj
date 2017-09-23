@@ -62,10 +62,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Printer\Document.cs" />
-    <Compile Include="Printer\EscapeSequence.cs" />
-    <Compile Include="Printer\Printer.cs" />
+    <Compile Include="Receipt\Alignment.cs" />
+    <Compile Include="Receipt\Barcode.cs" />
+    <Compile Include="Receipt\Bitmap.cs" />
+    <Compile Include="Receipt\Document.cs" />
+    <Compile Include="Receipt\EscapeSequence.cs" />
+    <Compile Include="Receipt\FeedAndPaperCut.cs" />
+    <Compile Include="Receipt\FeedCutAndStamp.cs" />
+    <Compile Include="Receipt\FeedLines.cs" />
+    <Compile Include="Receipt\FeedReverse.cs" />
+    <Compile Include="Receipt\FeedUnits.cs" />
+    <Compile Include="Receipt\FireStamp.cs" />
+    <Compile Include="Receipt\ICommand.cs" />
+    <Compile Include="Receipt\Line.cs" />
+    <Compile Include="Receipt\PaperCut.cs" />
+    <Compile Include="Receipt\PrintBitmap.cs" />
+    <Compile Include="Receipt\PrintBottomLogo.cs" />
+    <Compile Include="Receipt\Printer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Receipt\PrintTopLogo.cs" />
     <Compile Include="Scanner.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
