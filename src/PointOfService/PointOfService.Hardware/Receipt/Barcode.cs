@@ -4,7 +4,7 @@ using Microsoft.PointOfService;
 namespace PointOfService.Hardware.Receipt
 {
     [XmlRoot]
-    public class Barcode : ICommand
+    public class Barcode : Command
     {
         [XmlAttribute]
         public Alignment Alignment { get; set; }
@@ -24,7 +24,7 @@ namespace PointOfService.Hardware.Receipt
         [XmlAttribute]
         public BarCodeTextPosition TextPosition { get; set; }
 
-        public void Execute(PosPrinter printer)
+        public override void Execute(PosPrinter printer)
         {
             var alignment = 0;
 

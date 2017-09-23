@@ -4,12 +4,12 @@ using Microsoft.PointOfService;
 namespace PointOfService.Hardware.Receipt
 {
     [XmlRoot]
-    public class FeedReverse : ICommand
+    public class FeedReverse : Command
     {
         [XmlAttribute]
         public short? Lines { get; set; }
 
-        public void Execute(PosPrinter printer)
+        public override void Execute(PosPrinter printer)
         {
             printer.Print(EscapeSequence.FeedReverse(Lines));
         }

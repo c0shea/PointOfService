@@ -4,12 +4,12 @@ using Microsoft.PointOfService;
 namespace PointOfService.Hardware.Receipt
 {
     [XmlRoot]
-    public class PrintBitmap : ICommand
+    public class PrintBitmap : Command
     {
         [XmlAttribute]
         public short BitmapNumber { get; set; }
 
-        public void Execute(PosPrinter printer)
+        public override void Execute(PosPrinter printer)
         {
             printer.Print(EscapeSequence.PrintBitmap(BitmapNumber));
         }

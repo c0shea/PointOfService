@@ -39,33 +39,33 @@ namespace PointOfService.Hardware.Receipt
             Device.Close();
         }
         
-        public void Execute(List<Line> lines)
-        {
-            Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Transaction);
+        //public void Execute(List<Line> lines)
+        //{
+        //    Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Transaction);
 
-            foreach (var line in lines)
-            {
-                Device.PrintNormal(PrinterStation.Receipt, line.ToString());
-            }
+        //    foreach (var line in lines)
+        //    {
+        //        Device.PrintNormal(PrinterStation.Receipt, line.ToString());
+        //    }
 
-            Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Normal);
-        }
+        //    Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Normal);
+        //}
 
-        public void ExecuteAll(IEnumerable<ICommand> commands)
-        {
-            Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Transaction);
+        //public void ExecuteAll(IEnumerable<ICommand> commands)
+        //{
+        //    Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Transaction);
 
-            foreach (var command in commands)
-            {
-                command.Execute(Device);
-            }
+        //    foreach (var command in commands)
+        //    {
+        //        command.Execute(Device);
+        //    }
 
-            Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Normal);
-        }
+        //    Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Normal);
+        //}
 
-        public void Execute(ICommand command)
-        {
-            command.Execute(Device);
-        }
+        //public void Execute(ICommand command)
+        //{
+        //    command.Execute(Device);
+        //}
     }
 }

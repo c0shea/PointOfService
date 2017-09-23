@@ -4,9 +4,9 @@ using Microsoft.PointOfService;
 namespace PointOfService.Hardware.Receipt
 {
     [XmlRoot]
-    public class FireStamp : ICommand
+    public class FireStamp : Command
     {
-        public void Execute(PosPrinter printer)
+        public override void Execute(PosPrinter printer)
         {
             printer.Print(EscapeSequence.FireStamp);
         }

@@ -4,7 +4,7 @@ using Microsoft.PointOfService;
 namespace PointOfService.Hardware.Receipt
 {
     [XmlRoot]
-    public class Bitmap : ICommand
+    public class Bitmap : Command
     {
         [XmlAttribute]
         public Alignment Alignment { get; set; }
@@ -12,7 +12,7 @@ namespace PointOfService.Hardware.Receipt
         [XmlAttribute]
         public string FileName { get; set; }
 
-        public void Execute(PosPrinter printer)
+        public override void Execute(PosPrinter printer)
         {
             var alignment = 0;
 

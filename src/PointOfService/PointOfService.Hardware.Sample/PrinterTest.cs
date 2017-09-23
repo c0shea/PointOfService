@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Microsoft.PointOfService;
 using PointOfService.Hardware.Receipt;
 
@@ -18,6 +19,12 @@ namespace PointOfService.Hardware.Sample
             printer.Open();
 
             var receipt = BuildReceipt();
+            var serializer = new XmlSerializer(typeof(Document));
+
+            using (var file = File.OpenWrite(@"Receipt.xml"))
+            {
+                serializer.Serialize(file, receipt);
+            }
 
             receipt.Print(printer);
 
@@ -88,28 +95,28 @@ namespace PointOfService.Hardware.Sample
             Console.ReadLine();
         }
 
-        private static void PrintProperties(Printer printer)
-        {
-            var lines = new List<Line>();
+        //private static void PrintProperties(Printer printer)
+        //{
+        //    var lines = new List<Line>();
 
-            var t = printer.Device.GetType();
-            var p = t.GetProperties();
+        //    var t = printer.Device.GetType();
+        //    var p = t.GetProperties();
 
-            foreach (var propertyInfo in p)
-            {
-                lines.Add(new Line
-                {
-                    Alignment = Alignment.Left,
-                    Text = $"{EscapeSequence.Bold()}{propertyInfo.Name}: {EscapeSequence.Normal}{Format(propertyInfo.GetValue(printer.Device))}",
-                    CharactersPerLine = 56
-                });
-            }
+        //    foreach (var propertyInfo in p)
+        //    {
+        //        lines.Add(new Line
+        //        {
+        //            Alignment = Alignment.Left,
+        //            Text = $"{EscapeSequence.Bold()}{propertyInfo.Name}: {EscapeSequence.Normal}{Format(propertyInfo.GetValue(printer.Device))}",
+        //            CharactersPerLine = 56
+        //        });
+        //    }
 
 
-            printer.ExecuteAll(lines);
+        //    printer.ExecuteAll(lines);
 
-            printer.Execute(new FeedAndPaperCut());
-        }
+        //    printer.Execute(new FeedAndPaperCut());
+        //}
 
         private static string Format(object obj)
         {
@@ -143,56 +150,56 @@ namespace PointOfService.Hardware.Sample
 
             var document = new Document
             {
-                Commands = new List<ICommand>
+                Commands = new List<Command>
                 {
-                    new Bitmap
-                    {
-                        Alignment = Alignment.Center,
-                        FileName = logoPath
-                    },
-                    new FeedUnits
-                    {
-                        Units = 250
-                    },
+                    //new Bitmap
+                    //{
+                    //    Alignment = Alignment.Center,
+                    //    FileName = logoPath
+                    //},
+                    //new FeedUnits
+                    //{
+                    //    Units = 250
+                    //},
                     new Line
                     {
                         Alignment = Alignment.Center,
                         Text = "123 MAIN ST, BOSTON, MA 01841"
                     },
-                    new FeedUnits
-                    {
-                        Units = 250
-                    },
-                    new Line
-                    {
-                        IsBold = true,
-                        IsUnderline = true,
-                        Text = "Item Description                             Price     "
-                    },
-                    new Line
-                    {
-                        IsBold = true,
-                        Text = "DAIRY"
-                    },
-                    new Line
-                    {
-                        CharactersPerLine = 42,
-                        Text = "2% GAL MILK                                  $3.99     "
-                    },
-                    new FeedUnits
-                    {
-                        Units = 250
-                    },
-                    new Barcode
-                    {
-                        Alignment = Alignment.Center,
-                        Data = "09231700130015342",
-                        Height = 400,
-                        Width = 1000,
-                        Symbology = BarCodeSymbology.Code128,
-                        TextPosition = BarCodeTextPosition.Below
-                    },
-                    new FeedAndPaperCut()
+                    //new FeedUnits
+                    //{
+                    //    Units = 250
+                    //},
+                    //new Line
+                    //{
+                    //    IsBold = true,
+                    //    IsUnderline = true,
+                    //    Text = "Item Description                             Price     "
+                    //},
+                    //new Line
+                    //{
+                    //    IsBold = true,
+                    //    Text = "DAIRY"
+                    //},
+                    //new Line
+                    //{
+                    //    CharactersPerLine = 42,
+                    //    Text = "2% GAL MILK                                  $3.99     "
+                    //},
+                    //new FeedUnits
+                    //{
+                    //    Units = 250
+                    //},
+                    //new Barcode
+                    //{
+                    //    Alignment = Alignment.Center,
+                    //    Data = "09231700130015342",
+                    //    Height = 400,
+                    //    Width = 1000,
+                    //    Symbology = BarCodeSymbology.Code128,
+                    //    TextPosition = BarCodeTextPosition.Below
+                    //},
+                    //new FeedAndPaperCut()
                 }
             };
 
