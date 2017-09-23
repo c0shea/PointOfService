@@ -1,14 +1,27 @@
-﻿using Microsoft.PointOfService;
+﻿using System.Xml.Serialization;
+using Microsoft.PointOfService;
 
 namespace PointOfService.Hardware.Receipt
 {
+    [XmlRoot]
     public class Barcode : ICommand
     {
+        [XmlAttribute]
         public Alignment Alignment { get; set; }
+
+        [XmlAttribute]
         public BarCodeSymbology Symbology { get; set; }
+
+        [XmlAttribute]
         public string Data { get; set; }
+
+        [XmlAttribute]
         public int Height { get; set; }
+
+        [XmlAttribute]
         public int Width { get; set; }
+
+        [XmlAttribute]
         public BarCodeTextPosition TextPosition { get; set; }
 
         public void Execute(PosPrinter printer)

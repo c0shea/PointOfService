@@ -1,15 +1,28 @@
 ﻿using System.Text;
+using System.Xml.Serialization;
 using Microsoft.PointOfService;
 
 namespace PointOfService.Hardware.Receipt
 {
+    [XmlRoot]
     public class Line : ICommand
     {
+        [XmlAttribute]
         public Alignment Alignment { get; set; }
+
+        [XmlAttribute]
         public bool IsBold { get; set; }
+
+        [XmlAttribute]
         public bool IsUnderline { get; set; }
+
+        [XmlAttribute]
         public bool IsItalic { get; set; }
+
+        [XmlAttribute]
         public short? CharactersPerLine { get; set; }
+
+        [XmlAttribute]
         public string Text { get; set; }
 
         public override string ToString()
