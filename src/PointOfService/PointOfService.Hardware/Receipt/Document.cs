@@ -8,6 +8,24 @@ namespace PointOfService.Hardware.Receipt
     public class Document
     {
         public List<ICommand> Commands { get; set; }
+
+        public void Print(Printer printer)
+        {
+            if (printer.Device.CapTransaction)
+            {
+                printer.Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Transaction);
+            }
+
+            foreach (var command in Commands)
+            {
+                command.Execute(printer.Device);
+            }
+
+            if (printer.Device.CapTransaction)
+            {
+                printer.Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Normal);
+            }
+        }
     }
 
     public static class CommandExtensions
