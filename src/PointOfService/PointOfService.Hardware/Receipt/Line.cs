@@ -51,11 +51,18 @@ namespace PointOfService.Hardware.Receipt
 
         public void Execute(PosPrinter printer, PrinterStation station)
         {
-            if (CharactersPerLine.HasValue && station == PrinterStation.Receipt)
+            if (CharactersPerLine.HasValue)
             {
-                printer.RecLineChars = CharactersPerLine.Value;
+                if (station == PrinterStation.Receipt)
+                {
+                    printer.RecLineChars = CharactersPerLine.Value;
+                }
+                else if (station == PrinterStation.Slip)
+                {
+                    printer.SlpLineChars = CharactersPerLine.Value;
+                }
             }
-
+            
             if (station == PrinterStation.Slip)
             {
                 printer.PrintNormal(station, Text);

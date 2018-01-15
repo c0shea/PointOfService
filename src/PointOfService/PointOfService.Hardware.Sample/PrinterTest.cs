@@ -8,15 +8,45 @@ using PointOfService.Hardware.Receipt;
 
 namespace PointOfService.Hardware.Sample
 {
-    public class PrinterTest
+    public static class PrinterTest
     {
-        public PrinterTest()
+        public static void Run()
         {
-            var printer = new Printer("PosPrinter");
-            printer.Open();
+            using (var printer = new Printer("PosPrinter"))
+            {
+                printer.Open();
 
-            printer.PrintReceipt(BuildReceipt());
-            printer.PrintSlip(BuildSlip(), new TimeSpan(0, 0, 30));
+                var option = 0;
+
+                while (option >= 0)
+                {
+                    Console.Clear();
+                    Console.BackgroundColor = ConsoleColor.Blue;
+                    Console.WriteLine("Select an Option:");
+                    Console.WriteLine(" 1  Receipt");
+                    Console.WriteLine(" 2  Slip");
+                    Console.WriteLine("-1  Exit");
+                    Console.Write("\r\nSelection: ");
+
+                    var input = Console.ReadLine();
+
+                    if (input == null || !int.TryParse(input, out option))
+                    {
+                        Console.WriteLine("No valid option was selected");
+                        continue;
+                    }
+
+                    switch (option)
+                    {
+                        case 1:
+                            printer.PrintReceipt(BuildReceipt());
+                            break;
+                        case 2:
+                            printer.PrintSlip(BuildSlip(), new TimeSpan(0, 0, 30));
+                            break;
+                    }
+                }
+            }
 
             //Console.WriteLine("Opening Drawer...");
             //printer.CashDrawerOpenCodes = new byte[] {27, 112, 0, 100, 250};
@@ -79,8 +109,6 @@ namespace PointOfService.Hardware.Sample
             //});
 
             //printer.Execute(new FeedLines{Lines = 4});
-
-            printer.Dispose();
         }
 
         //private static void PrintProperties(Printer printer)

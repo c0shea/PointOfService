@@ -6,6 +6,11 @@ namespace PointOfService.Hardware.Receipt
     {
         public void Execute(PosPrinter printer, PrinterStation station)
         {
+            if (!printer.CapRecStamp && station == PrinterStation.Receipt)
+            {
+                return;
+            }
+
             printer.PrintNormal(station, EscapeSequence.FireStamp);
         }
     }

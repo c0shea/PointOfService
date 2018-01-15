@@ -13,6 +13,11 @@ namespace PointOfService.Hardware.Receipt
 
         public void Execute(PosPrinter printer, PrinterStation station)
         {
+            if (!printer.CapRecBarCode && station == PrinterStation.Receipt || !printer.CapSlpBarCode && station == PrinterStation.Slip)
+            {
+                return;
+            }
+
             var alignment = 0;
 
             switch (Alignment)

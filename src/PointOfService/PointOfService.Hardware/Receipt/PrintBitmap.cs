@@ -8,6 +8,11 @@ namespace PointOfService.Hardware.Receipt
 
         public void Execute(PosPrinter printer, PrinterStation station)
         {
+            if (!printer.CapRecBitmap && station == PrinterStation.Receipt || !printer.CapSlpBitmap && station == PrinterStation.Slip)
+            {
+                return;
+            }
+
             printer.PrintNormal(station, EscapeSequence.PrintBitmap(BitmapNumber));
         }
     }

@@ -8,6 +8,11 @@ namespace PointOfService.Hardware.Receipt
 
         public void Execute(PosPrinter printer, PrinterStation station)
         {
+            if (!printer.CapRecPaperCut && station == PrinterStation.Receipt)
+            {
+                return;
+            }
+
             printer.PrintNormal(station, EscapeSequence.FeedAndPaperCut(PercentCut));
         }
     }

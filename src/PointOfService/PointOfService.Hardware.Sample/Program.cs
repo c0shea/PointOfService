@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace PointOfService.Hardware.Sample
 {
-    public class Program
+    public static class Program
     {
         public static void Main()
         {
@@ -28,10 +28,10 @@ namespace PointOfService.Hardware.Sample
                 switch (option)
                 {
                     case 1:
-                        new ScannerTest();
+                        ScannerTest.Run();
                         break;
                     case 2:
-                        new PrinterTest();
+                        PrinterTest.Run();
                         break;
                 }
             }

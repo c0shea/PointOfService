@@ -2,9 +2,9 @@
 
 namespace PointOfService.Hardware.Sample
 {
-    public class ScannerTest
+    public static class ScannerTest
     {
-        public ScannerTest()
+        public static void Run()
         {
             var scanner = new Scanner("STI_USBSCANNER");
 

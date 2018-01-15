@@ -1,4 +1,5 @@
-﻿using Microsoft.PointOfService;
+﻿using System.IO;
+using Microsoft.PointOfService;
 
 namespace PointOfService.Hardware.Receipt
 {
@@ -9,6 +10,16 @@ namespace PointOfService.Hardware.Receipt
 
         public void Execute(PosPrinter printer, PrinterStation station)
         {
+            if (!printer.CapRecBitmap && station == PrinterStation.Receipt || !printer.CapSlpBitmap && station == PrinterStation.Slip)
+            {
+                return;
+            }
+
+            if (!File.Exists(FileName))
+            {
+                return;
+            }
+
             var alignment = 0;
 
             switch (Alignment)
