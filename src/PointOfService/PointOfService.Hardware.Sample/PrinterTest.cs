@@ -20,13 +20,14 @@ namespace PointOfService.Hardware.Sample
 
                 while (option >= 0)
                 {
-                    Console.Clear();
-                    Console.BackgroundColor = ConsoleColor.Blue;
+                    Program.WriteMenuHeader("PRINTER");
+
                     Console.WriteLine("Select an Option:");
                     Console.WriteLine(" 1  Receipt");
                     Console.WriteLine(" 2  Slip");
+                    Console.WriteLine(" 3  Open Cash Drawer");
                     Console.WriteLine("-1  Exit");
-                    Console.Write("\r\nSelection: ");
+                    Program.WritePrompt();
 
                     var input = Console.ReadLine();
 
@@ -43,6 +44,10 @@ namespace PointOfService.Hardware.Sample
                             break;
                         case 2:
                             printer.PrintSlip(BuildSlip(), new TimeSpan(0, 0, 30));
+                            break;
+                        case 3:
+                            printer.CashDrawerOpenCodes = new byte[] { 27, 112, 0, 100, 250 };
+                            printer.OpenCashDrawer();
                             break;
                     }
                 }

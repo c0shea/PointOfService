@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 
 namespace PointOfService.Hardware.Sample
 {
@@ -11,11 +10,13 @@ namespace PointOfService.Hardware.Sample
 
             while (option >= 0)
             {
+                WriteMenuHeader("MAIN");
+
                 Console.WriteLine("Select an Option:");
                 Console.WriteLine(" 1  Scanner");
                 Console.WriteLine(" 2  Printer");
                 Console.WriteLine("-1  Exit");
-                Console.Write("\r\nSelection: ");
+                WritePrompt();
 
                 var input = Console.ReadLine();
 
@@ -37,7 +38,31 @@ namespace PointOfService.Hardware.Sample
             }
 
             Console.WriteLine("Exiting...");
-            Thread.Sleep(750);
+        }
+
+        public static void WriteMenuHeader(string menuName)
+        {
+            const string menuSuffix = " MENU";
+            const int paddingPerSide = 2;
+            var headerLength = menuName.Length + menuSuffix.Length + paddingPerSide * 2;
+
+            Console.Clear();
+            Console.BackgroundColor = ConsoleColor.Blue;
+            Console.ForegroundColor = ConsoleColor.White;
+
+            Console.WriteLine(new string('*', headerLength));
+            Console.WriteLine($"* {menuName}{menuSuffix} *");
+            Console.WriteLine(new string('*', headerLength));
+            Console.WriteLine(Environment.NewLine);
+
+            Console.ResetColor();
+        }
+
+        public static void WritePrompt()
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($"{Environment.NewLine}Selection: ");
+            Console.ResetColor();
         }
     }
 }

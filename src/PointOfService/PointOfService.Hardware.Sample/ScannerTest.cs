@@ -6,6 +6,8 @@ namespace PointOfService.Hardware.Sample
     {
         public static void Run()
         {
+            Console.Clear();
+
             var scanner = new Scanner("STI_USBSCANNER");
 
             scanner.Start((barcode, symbology) =>
