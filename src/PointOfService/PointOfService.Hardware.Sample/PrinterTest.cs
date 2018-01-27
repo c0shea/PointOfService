@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using Microsoft.PointOfService;
+using Newtonsoft.Json;
 using PointOfService.Hardware.Receipt;
 
 namespace PointOfService.Hardware.Sample
@@ -24,8 +25,9 @@ namespace PointOfService.Hardware.Sample
 
                     Console.WriteLine("Select an Option:");
                     Console.WriteLine(" 1  Receipt");
-                    Console.WriteLine(" 2  Slip");
-                    Console.WriteLine(" 3  Open Cash Drawer");
+                    Console.WriteLine(" 2  Receipt from JSON");
+                    Console.WriteLine(" 3  Slip");
+                    Console.WriteLine(" 4  Open Cash Drawer");
                     Console.WriteLine("-1  Exit");
                     Program.WritePrompt();
 
@@ -43,9 +45,13 @@ namespace PointOfService.Hardware.Sample
                             printer.PrintReceipt(BuildReceipt());
                             break;
                         case 2:
-                            printer.PrintSlip(BuildSlip(), new TimeSpan(0, 0, 30));
+                            var document = JsonConvert.DeserializeObject<Document>(File.ReadAllText("Receipt.json"));
+                            printer.PrintReceipt(document);
                             break;
                         case 3:
+                            printer.PrintSlip(BuildSlip(), new TimeSpan(0, 0, 30));
+                            break;
+                        case 4:
                             printer.CashDrawerOpenCodes = new byte[] { 27, 112, 0, 100, 250 };
                             printer.OpenCashDrawer();
                             break;
@@ -195,7 +201,7 @@ namespace PointOfService.Hardware.Sample
                     {
                         IsBold = true,
                         IsUnderline = true,
-                        Text = "Item Description                             Price     "
+                        Text = "Item Description              Price       "
                     },
                     new Line
                     {
@@ -205,7 +211,7 @@ namespace PointOfService.Hardware.Sample
                     new Line
                     {
                         CharactersPerLine = 42,
-                        Text = "2% GAL MILK                                  $3.99     "
+                        Text = "2% GAL MILK                      $3.99"
                     },
                     new FeedUnits
                     {

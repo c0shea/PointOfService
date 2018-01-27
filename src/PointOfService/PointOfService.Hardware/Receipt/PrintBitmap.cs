@@ -4,6 +4,7 @@ namespace PointOfService.Hardware.Receipt
 {
     public class PrintBitmap : ICommand
     {
+        public string Name => nameof(PrintBitmap);
         public short BitmapNumber { get; set; }
 
         public void Execute(PosPrinter printer, PrinterStation station)

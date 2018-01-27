@@ -4,6 +4,7 @@ namespace PointOfService.Hardware.Receipt
 {
     public class Barcode : ICommand
     {
+        public string Name => nameof(Barcode);
         public Alignment Alignment { get; set; }
         public BarCodeSymbology Symbology { get; set; }
         public string Data { get; set; }

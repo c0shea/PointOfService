@@ -5,6 +5,7 @@ namespace PointOfService.Hardware.Receipt
 {
     public class Bitmap : ICommand
     {
+        public string Name => nameof(Bitmap);
         public Alignment Alignment { get; set; }
         public string FileName { get; set; }
 

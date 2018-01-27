@@ -1,0 +1,55 @@
+{
+  "Commands": [
+    {
+      "Name": "Line",
+      "Alignment": "Center",
+      "Text": "POINT OF SERVICE",
+      "IsBold": true,
+      "IsUnderline": true
+    },
+    {
+      "Name": "FeedUnits",
+      "Units": 250
+    },
+    {
+      "Name": "Line",
+      "Alignment": "Center",
+      "Text": "123 MAIN ST, BOSTON, MA 01841"
+    },
+    {
+      "Name": "FeedUnits",
+      "Units": 250
+    },
+    {
+      "Name": "Line",
+      "Text": "Item Description              Price       ",
+      "IsBold": true,
+      "IsUnderline": true
+    },
+    {
+      "Name": "Line",
+      "Text": "DAIRY",
+      "IsBold": true
+    },
+    {
+      "Name": "Line",
+      "Text": "2% GAL MILK                      $3.99"
+    },
+    {
+      "Name": "FeedUnits",
+      "Units": 250
+    },
+    {
+      "Name": "Barcode",
+      "Alignment": "Center",
+      "Data": "09231700130015342",
+      "Height": 400,
+      "Width": 1000,
+      "Symbology": "Code128",
+      "TextPosition": "Below"
+    },
+    {
+      "Name": "FeedAndPaperCut"
+    }
+  ]
+}

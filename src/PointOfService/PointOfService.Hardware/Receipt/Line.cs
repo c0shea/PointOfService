@@ -5,6 +5,7 @@ namespace PointOfService.Hardware.Receipt
 {
     public class Line : ICommand
     {
+        public string Name => nameof(Line);
         public Alignment Alignment { get; set; }
         public bool IsBold { get; set; }
         public bool IsUnderline { get; set; }

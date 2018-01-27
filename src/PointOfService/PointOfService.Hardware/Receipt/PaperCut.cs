@@ -4,6 +4,7 @@ namespace PointOfService.Hardware.Receipt
 {
     public class PaperCut : ICommand
     {
+        public string Name => nameof(PaperCut);
         public byte? PercentCut { get; set; }
 
         public void Execute(PosPrinter printer, PrinterStation station)
