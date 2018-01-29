@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace PointOfService.Hardware.Receipt.Template
 {
@@ -15,8 +12,10 @@ namespace PointOfService.Hardware.Receipt.Template
         public string Name => ((RendererAttribute)GetType().GetCustomAttributes(typeof(RendererAttribute), false)
                                                            .FirstOrDefault())?.Name;
 
-        public string Format { get; set; } = "{0}";
-        
-        public abstract void Append(StringBuilder sb);
+        public string Format { get; set; }
+
+        public virtual void Append(StringBuilder sb) => sb.AppendFormat("{0:" + Format + "}", Render());
+
+        protected abstract object Render();
     }
 }

@@ -67,7 +67,7 @@ namespace PointOfService.Hardware.Sample
                             break;
 
                         case 6:
-                            var se = new StringEnumerator("${Date} abc123");
+                            var se = new StringEnumerator("${Date:Format=MM/dd/yyyy} abc123 ${Date}");
                             var renderers = RendererParser.CompileRenderers(se, false, out var text);
                             var sb = new StringBuilder();
 
