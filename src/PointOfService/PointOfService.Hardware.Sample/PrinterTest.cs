@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using Microsoft.PointOfService;
@@ -28,6 +29,7 @@ namespace PointOfService.Hardware.Sample
                     Console.WriteLine(" 2  Open Cash Drawer");
                     Console.WriteLine(" 3  Receipt");
                     Console.WriteLine(" 4  Receipt from JSON");
+                    Console.WriteLine(" 5  Receipt with OPOS Properties");
                     Console.WriteLine("-1  Exit");
                     Program.WritePrompt();
 
@@ -44,132 +46,29 @@ namespace PointOfService.Hardware.Sample
                         case 1:
                             printer.PrintSlip(BuildSlip(), new TimeSpan(0, 0, 30));
                             break;
+
                         case 2:
                             printer.CashDrawerOpenCodes = new byte[] { 27, 112, 0, 100, 250 };
                             printer.OpenCashDrawer();
                             break;
+
                         case 3:
                             printer.PrintReceipt(BuildReceipt());
                             break;
+
                         case 4:
                             var document = JsonConvert.DeserializeObject<Document>(File.ReadAllText("Receipt.json"));
                             printer.PrintReceipt(document);
                             break;
+
+                        case 5:
+                            PrintProperties(printer);
+                            break;
                     }
                 }
             }
-
-            //Console.WriteLine("Opening Drawer...");
-            //printer.CashDrawerOpenCodes = new byte[] {27, 112, 0, 100, 250};
-            //printer.OpenCashDrawer();
-
-            //Console.WriteLine("Printing...");
-            //printer.Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Transaction);
-            //printer.Device.PrintNormal(PrinterStation.Receipt, "Test Receipt");
-            //printer.Device.TransactionPrint(PrinterStation.Receipt, PrinterTransactionControl.Normal);
-
-            //var b = new Bitmap
-            //{
-            //    Alignment = Alignment.Center,
-            //    FileName = @"C:\Users\hinta\Desktop\Test.bmp"
-            //};
-
-            //printer.Execute(b);
-
-            //printer.Execute(new Barcode
-            //{
-            //    Alignment = Alignment.Center,
-            //    Symbology = BarCodeSymbology.Upca,
-            //    Data = "609032551339",
-            //    Height = 750,
-            //    Width = 1500,
-            //    TextPosition = BarCodeTextPosition.Below
-            //});
-
-
-
-            // CPL Lg = 28, M = 42, Sm = 56
-            //printer.ExecuteAll(new List<Line>
-            //{
-            //    new Line
-            //    {
-            //        IsBold = true,
-            //        Text = "This is bold text"
-            //    },
-            //    new Line
-            //    {
-            //        IsItalic = true,
-            //        Text = "This is italic text",
-            //        Alignment = Alignment.Center,
-            //        CharactersPerLine = 56
-            //    },
-            //    new Line
-            //    {
-            //        IsUnderline = true,
-            //        Text = "This is underline text",
-            //        Alignment = Alignment.Right
-            //    },
-            //    new Line
-            //    {
-            //        IsBold = true,
-            //        IsItalic = true,
-            //        IsUnderline = true,
-            //        Text = "This is all three",
-            //        CharactersPerLine = 28
-            //    }
-            //});
-
-            //printer.Execute(new FeedLines{Lines = 4});
         }
-
-        //private static void PrintProperties(Printer printer)
-        //{
-        //    var lines = new List<Line>();
-
-        //    var t = printer.Device.GetType();
-        //    var p = t.GetProperties();
-
-        //    foreach (var propertyInfo in p)
-        //    {
-        //        lines.Add(new Line
-        //        {
-        //            Alignment = Alignment.Left,
-        //            Text = $"{EscapeSequence.Bold()}{propertyInfo.Name}: {EscapeSequence.Normal}{Format(propertyInfo.GetValue(printer.Device))}",
-        //            CharactersPerLine = 56
-        //        });
-        //    }
-
-
-        //    printer.ExecuteAll(lines);
-
-        //    printer.Execute(new FeedAndPaperCut());
-        //}
-
-        private static string Format(object obj)
-        {
-            var sb = new StringBuilder();
-
-            if (obj != null)
-            {
-                sb.AppendLine(obj.ToString());
-            }
-
-            var array = obj as Array;
-
-            if (array != null)
-            {
-                for (var i = 0; i < array.Length; i++)
-                {
-                    sb.Append("  [");
-                    sb.Append(i);
-                    sb.Append("]: ");
-                    sb.AppendLine(array.GetValue(i).ToString());
-                }
-            }
-
-            return sb.ToString();
-        }
-
+        
         private static Document BuildReceipt()
         {
             var binDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -251,6 +150,56 @@ namespace PointOfService.Hardware.Sample
             };
 
             return document;
+        }
+
+        private static void PrintProperties(Printer printer)
+        {
+            string FormatPropertyValue(object obj)
+            {
+                var sb = new StringBuilder();
+
+                if (obj != null)
+                {
+                    sb.Append(obj);
+                }
+
+                if (obj is Array array)
+                {
+                    sb.AppendLine();
+
+                    for (var i = 0; i < array.Length; i++)
+                    {
+                        sb.Append("  [");
+                        sb.Append(i);
+                        sb.Append("]: ");
+                        sb.Append(array.GetValue(i));
+
+                        if (i < array.Length - 1)
+                        {
+                            sb.AppendLine();
+                        }
+                    }
+                }
+
+                return sb.ToString();
+            }
+
+            var document = new Document
+            {
+                Commands = new List<ICommand>()
+            };
+
+            foreach (var property in printer.Device.GetType().GetProperties())
+            {
+                document.Commands.Add(new Line
+                {
+                    Text = $"{EscapeSequence.Bold()}{property.Name}: {EscapeSequence.Normal}{FormatPropertyValue(property.GetValue(printer.Device))}"
+                });
+            }
+
+            document.Commands.Add(new FeedAndPaperCut());
+
+            printer.PrintReceipt(document);
         }
     }
 }

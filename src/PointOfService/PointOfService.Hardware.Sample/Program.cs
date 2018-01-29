@@ -31,6 +31,7 @@ namespace PointOfService.Hardware.Sample
                     case 1:
                         ScannerTest.Run();
                         break;
+
                     case 2:
                         PrinterTest.Run();
                         break;
