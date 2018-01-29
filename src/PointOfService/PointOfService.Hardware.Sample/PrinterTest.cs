@@ -24,10 +24,10 @@ namespace PointOfService.Hardware.Sample
                     Program.WriteMenuHeader("PRINTER");
 
                     Console.WriteLine("Select an Option:");
-                    Console.WriteLine(" 1  Receipt");
-                    Console.WriteLine(" 2  Receipt from JSON");
-                    Console.WriteLine(" 3  Slip");
-                    Console.WriteLine(" 4  Open Cash Drawer");
+                    Console.WriteLine(" 1  Slip");
+                    Console.WriteLine(" 2  Open Cash Drawer");
+                    Console.WriteLine(" 3  Receipt");
+                    Console.WriteLine(" 4  Receipt from JSON");
                     Console.WriteLine("-1  Exit");
                     Program.WritePrompt();
 
@@ -42,18 +42,18 @@ namespace PointOfService.Hardware.Sample
                     switch (option)
                     {
                         case 1:
-                            printer.PrintReceipt(BuildReceipt());
-                            break;
-                        case 2:
-                            var document = JsonConvert.DeserializeObject<Document>(File.ReadAllText("Receipt.json"));
-                            printer.PrintReceipt(document);
-                            break;
-                        case 3:
                             printer.PrintSlip(BuildSlip(), new TimeSpan(0, 0, 30));
                             break;
-                        case 4:
+                        case 2:
                             printer.CashDrawerOpenCodes = new byte[] { 27, 112, 0, 100, 250 };
                             printer.OpenCashDrawer();
+                            break;
+                        case 3:
+                            printer.PrintReceipt(BuildReceipt());
+                            break;
+                        case 4:
+                            var document = JsonConvert.DeserializeObject<Document>(File.ReadAllText("Receipt.json"));
+                            printer.PrintReceipt(document);
                             break;
                     }
                 }
