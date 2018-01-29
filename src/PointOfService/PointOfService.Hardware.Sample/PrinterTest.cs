@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using Microsoft.PointOfService;
 using Newtonsoft.Json;
 using PointOfService.Hardware.Receipt;
+using PointOfService.Hardware.Receipt.Template;
 
 namespace PointOfService.Hardware.Sample
 {
@@ -30,6 +30,7 @@ namespace PointOfService.Hardware.Sample
                     Console.WriteLine(" 3  Receipt");
                     Console.WriteLine(" 4  Receipt from JSON");
                     Console.WriteLine(" 5  Receipt with OPOS Properties");
+                    Console.WriteLine(" 6  Template Renderer");
                     Console.WriteLine("-1  Exit");
                     Program.WritePrompt();
 
@@ -63,6 +64,21 @@ namespace PointOfService.Hardware.Sample
 
                         case 5:
                             PrintProperties(printer);
+                            break;
+
+                        case 6:
+                            var se = new StringEnumerator("${Date} abc123");
+                            var renderers = RendererParser.CompileRenderers(se, false, out var text);
+                            var sb = new StringBuilder();
+
+                            foreach (var renderer in renderers)
+                            {
+                                renderer.Append(sb);
+                            }
+
+                            var str = sb.ToString();
+
+                            ;
                             break;
                     }
                 }

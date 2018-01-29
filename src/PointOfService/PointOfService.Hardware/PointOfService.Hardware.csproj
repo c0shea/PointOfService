@@ -85,6 +85,12 @@
     <Compile Include="Receipt\Printer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Receipt\PrintTopLogo.cs" />
+    <Compile Include="Receipt\Template\DateRenderer.cs" />
+    <Compile Include="Receipt\Template\LiteralRenderer.cs" />
+    <Compile Include="Receipt\Template\Renderer.cs" />
+    <Compile Include="Receipt\Template\RendererAttribute.cs" />
+    <Compile Include="Receipt\Template\RendererParser.cs" />
+    <Compile Include="Receipt\Template\StringEnumerator.cs" />
     <Compile Include="Scanner.cs" />
   </ItemGroup>
   <ItemGroup>
