@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -31,6 +32,7 @@ namespace PointOfService.Hardware.Sample
                     Console.WriteLine(" 4  Receipt from JSON");
                     Console.WriteLine(" 5  Receipt with OPOS Properties");
                     Console.WriteLine(" 6  Template Renderer");
+                    Console.WriteLine(" 7  ASCII Characters");
                     Console.WriteLine("-1  Exit");
                     Program.WritePrompt();
 
@@ -79,6 +81,10 @@ namespace PointOfService.Hardware.Sample
                             var str = sb.ToString();
 
                             ;
+                            break;
+
+                        case 7:
+                            PrintAsciiCharacters(printer);
                             break;
                     }
                 }
@@ -210,6 +216,32 @@ namespace PointOfService.Hardware.Sample
                 document.Commands.Add(new Line
                 {
                     Text = $"{EscapeSequence.Bold()}{property.Name}: {EscapeSequence.Normal}{FormatPropertyValue(property.GetValue(printer.Device))}"
+                });
+            }
+
+            document.Commands.Add(new FeedAndPaperCut());
+
+            printer.PrintReceipt(document);
+        }
+
+        private static void PrintAsciiCharacters(Printer printer)
+        {
+            var document = new Document
+            {
+                Commands = new List<ICommand>()
+            };
+
+            for (int i = 33; i <= 255; i++)
+            {
+                if (i == 127)
+                {
+                    continue;
+                }
+
+                document.Commands.Add(new Line
+                {
+                    Text = i.ToString().PadLeft(4, ' ') + ":  " + new string((char)i, 30),
+                    CharactersPerLine = 56
                 });
             }
 
